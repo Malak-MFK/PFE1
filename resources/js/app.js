@@ -12,6 +12,9 @@ import './bootstrap';
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import './components/Example';
+import './components/Dashboard/Example';
+import './components/Stagiaires/Stg';
+import './components/Stagiaires/Addform';
+import './components/Stagiaires/Editform';
 
 
