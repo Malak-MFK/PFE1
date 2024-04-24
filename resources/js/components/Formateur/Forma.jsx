@@ -1,32 +1,31 @@
 import React from 'react';
+import { useState } from 'react'
 import ReactDOM from 'react-dom';
 import Header from '../Dashboard/Header';
 import Sidebar from '../Dashboard/Sidebar';
-import Afficher from './afficher';
+import AffichageF from './afficherF'
 
 
-function Stg({ openSidebarToggle, OpenSidebar }) {
+function Forma({ openSidebarToggle, OpenSidebar }) {
   return (
     <div className='grid-container'>
       <Header OpenSidebar={OpenSidebar}/>
       <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
+<AffichageF />
 
-
-
-       <Afficher/>
     </div>
 
   )
 }
 
-export default Stg;
+export default Forma;
 
-if (document.getElementById('Stg')) {
-  const Index = ReactDOM.createRoot(document.getElementById("Stg"));
+if (document.getElementById('Forma')) {
+  const Index = ReactDOM.createRoot(document.getElementById("Forma"));
 
   Index.render(
     <React.StrictMode>
-      <Stg/>
+      <Forma/>
     </React.StrictMode>
   )
 }

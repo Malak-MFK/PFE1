@@ -2,31 +2,29 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Header from '../Dashboard/Header';
 import Sidebar from '../Dashboard/Sidebar';
-import Afficher from './afficher';
+import AffichageA from './AfficherA';
 
 
-function Stg({ openSidebarToggle, OpenSidebar }) {
+function Annonce({ openSidebarToggle, OpenSidebar }) {
   return (
     <div className='grid-container'>
       <Header OpenSidebar={OpenSidebar}/>
       <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
 
-
-
-       <Afficher/>
+       <AffichageA/>
     </div>
 
   )
 }
 
-export default Stg;
+export default Annonce;
 
-if (document.getElementById('Stg')) {
-  const Index = ReactDOM.createRoot(document.getElementById("Stg"));
+if (document.getElementById('Annonce')) {
+  const Index = ReactDOM.createRoot(document.getElementById("Annonce"));
 
   Index.render(
     <React.StrictMode>
-      <Stg/>
+      <Annonce/>
     </React.StrictMode>
   )
 }

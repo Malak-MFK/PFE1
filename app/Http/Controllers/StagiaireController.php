@@ -2,69 +2,80 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Stagiaire;
-    class StagiaireController extends Controller
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class StagiaireController extends Controller
+{
+    // Index method to fetch all stagiaires
+    public function index()
     {
-        public function index()
-        {
-            // Retrieve all records from the stagiaires table
-            $stagiaires = Stagiaire::all();
-
-            // Return the records as a JSON response
-            return response()->json($stagiaires);
-        }
-
-        public function show(Stagiaire $stagiaire)
-        {
-            // Return the specified stagiaire record as a JSON response
-            return response()->json($stagiaire);
-        }
-
-        public function store(Request $request)
-        {
-            // Validate the request data
-            $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
-                'lastname' => 'required|string|max:255',
-                'cef' => 'required|string|max:255',
-                'num_inscription' => 'required|string|max:255',
-                'date_naissance' => 'required|date',
-                'date_inscription' => 'required|date',
-            ]);
-
-            // Create a new Stagiaire record using the validated data
-            $stagiaire = Stagiaire::create($validatedData);
-
-            // Return the newly created record as a JSON response
-            return response()->json($stagiaire, 201);
-        }
-
-        public function update(Request $request, Stagiaire $stagiaire)
-        {
-            // Validate the request data
-            $validatedData = $request->validate([
-                'name' => 'sometimes|required|string|max:255',
-                'lastname' => 'sometimes|required|string|max:255',
-                'cef' => 'sometimes|required|string|max:255',
-                'num_inscription' => 'sometimes|required|string|max:255',
-                'date_naissance' => 'sometimes|required|date',
-                'date_inscription' => 'sometimes|required|date',
-            ]);
-
-            // Update the specified Stagiaire record using the validated data
-            $stagiaire->update($validatedData);
-
-            // Return the updated record as a JSON response
-            return response()->json($stagiaire);
-        }
-
-        public function destroy(Stagiaire $stagiaire)
-        {
-            // Delete the specified Stagiaire record
-            $stagiaire->delete();
-
-            // Return a 204 No Content response
-            return response()->json(null, 204);
-        }
+        $stagiaires = Stagiaire::all();
+        return response()->json($stagiaires);
     }
+
+    // Store method to add a new stagiaire
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'cef' => 'required|string|max:255',
+            'num_inscription' => 'required|string|max:255',
+            'date_naissance' => 'required|date',
+            'date_inscription' => 'required|date',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'groupe' => 'string|max:255',
+        ]);
+
+        $imagePath = $request->file('image')->store('stagiaires', 'public');
+
+        $stagiaire = Stagiaire::create(array_merge($validatedData, ['image' => $imagePath]));
+
+        return response()->json($stagiaire, 201);
+    }
+
+    // Update method to update an existing stagiaire
+    public function update(Request $request, Stagiaire $stagiaire)
+    {
+        $validatedData = $request->validate([
+            'name' => 'string|max:255',
+            'lastname' => 'string|max:255',
+            'cef' => 'string|max:255',
+            'num_inscription' => 'string|max:255',
+            'date_naissance' => 'date',
+            'date_inscription' => 'date',
+            'groupe' => 'string|max:255',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if it exists
+            if ($stagiaire->image) {
+                Storage::disk('public')->delete($stagiaire->image);
+            }
+
+            // Store new image and update image path
+            $imagePath = $request->file('image')->store('stagiaires', 'public');
+            $validatedData['image'] = $imagePath;
+        }
+
+        // Update stagiaire with new data
+        $stagiaire->update($validatedData);
+
+        return response()->json($stagiaire);
+    }
+
+    // Destroy method to delete a stagiaire
+    public function destroy(Stagiaire $stagiaire)
+    {
+        if ($stagiaire->image) {
+            Storage::disk('public')->delete($stagiaire->image);
+        }
+
+        $stagiaire->delete();
+
+        return response()->json(null, 204);
+    }
+}

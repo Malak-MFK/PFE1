@@ -19,10 +19,11 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
 </a>
 </li>
 <li className='sidebar-list-item'>
-<a href="/Attestation">
-<MdPeopleOutline className='icon' /> Attestations
+<a href="/Formateur">
+<MdPeople className='icon' /> Formateur
 </a>
 </li>
+
 <li className='sidebar-list-item'>
 <a href="/Announcement">
 <MdAnnouncement className='icon' />Annonce</a></li>
