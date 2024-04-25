@@ -15,7 +15,6 @@ import './bootstrap';
 import './components/Dashboard/Example';
 import './components/Stagiaires/Stg';
 import './components/Stagiaires/Addform';
-import './components/Stagiaires/Editform';
 import './components/Formateur/Forma';
 import './components/Annonce/Annonce'
 

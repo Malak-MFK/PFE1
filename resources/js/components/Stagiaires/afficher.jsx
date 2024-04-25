@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AddForm from './Addform';
 
-
 const Affichage = () => {
   const [stagiaires, setStagiaires] = useState([]);
   const [selectedStagiaire, setSelectedStagiaire] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [groupeFilter, setGroupeFilter] = useState('');
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/stagiaires')
@@ -27,14 +27,13 @@ const Affichage = () => {
     }
   };
 
-
+  const handleClose = () => {
+    setShowAddForm(false);
+    window.location.reload();
+  };
 
   const handleAdd = () => {
     setShowAddForm(true);
-  };
-
-  const handleClose = () => {
-    setShowAddForm(false);
   };
 
   const handleAddSubmit = (newStagiaire) => {
@@ -42,8 +41,22 @@ const Affichage = () => {
     setShowAddForm(false);
   };
 
+  const groupes = [...new Set(stagiaires.map(stagiaire => stagiaire.groupe))];
+
+  const handleGroupeChange = (e) => {
+    setGroupeFilter(e.target.value);
+  };
+
+  const filteredStagiaires = groupeFilter ? stagiaires.filter(stagiaire => stagiaire.groupe === groupeFilter) : stagiaires;
+
   return (
     <div>
+      <select value={groupeFilter} onChange={handleGroupeChange}>
+        <option value="">Filter by groupe</option>
+        {groupes.map(groupe => (
+          <option key={groupe} value={groupe}>{groupe}</option>
+        ))}
+      </select>
       {showAddForm && <AddForm onSubmit={handleAddSubmit} onClose={handleClose} />}
       <table>
         <thead>
@@ -60,21 +73,19 @@ const Affichage = () => {
           </tr>
         </thead>
         <tbody>
-          {stagiaires.map(stagiaire => (
+          {filteredStagiaires.map(stagiaire => (
             <tr key={stagiaire.id}>
               <td>{stagiaire.name}</td>
               <td>{stagiaire.lastname}</td>
               <td>{stagiaire.cef}</td>
               <td>{stagiaire.num_inscription}</td>
+              <td>{stagiaire.groupe}</td>
               <td>{stagiaire.date_naissance}</td>
               <td>{stagiaire.date_inscription}</td>
-              <td>{stagiaire.groupe}</td>
-
               <td>
                 <img src={`http://localhost:8000/storage/${stagiaire.image}`} alt={`Stagiaire ${stagiaire.name} ${stagiaire.lastname}`} style={{ width: '50px', height: 'auto' }} />
               </td>
               <td>
-
                 <button onClick={() => handleDelete(stagiaire.id)}>Delete</button>
               </td>
             </tr>

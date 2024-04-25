@@ -4,22 +4,26 @@ import AddForma from './AddForma';
 
 const AffichageF = () => {
   const [formateurs, setFormateurs] = useState([]);
-  const [selectedFormateur, setSelectedFormateur] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/formateurs')
-      .then(response => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/formateurs');
         setFormateurs(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching formateurs:', error);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/formateurs/${Number(id)}`);
+      console.log('Deleting formateur with ID:', id);
+      await axios.delete(`http://localhost:8000/api/formateurs/${id}`);
+      console.log('Formateur deleted successfully.');
       setFormateurs(formateurs.filter(formateur => formateur.id !== id));
     } catch (error) {
       console.error('Error deleting formateur:', error);
@@ -64,14 +68,12 @@ const AffichageF = () => {
                 <img src={`http://localhost:8000/storage/${formateur.image}`} alt={`Formateur ${formateur.name} ${formateur.lastname}`} style={{ width: '50px', height: 'auto' }} />
               </td>
               <td>
-
                 <button onClick={() => handleDelete(formateur.id)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
       <button onClick={handleAdd}>Add</button>
     </div>
   );

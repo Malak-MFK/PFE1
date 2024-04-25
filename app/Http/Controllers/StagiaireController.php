@@ -46,8 +46,8 @@ class StagiaireController extends Controller
             'num_inscription' => 'string|max:255',
             'date_naissance' => 'date',
             'date_inscription' => 'date',
-            'groupe' => 'string|max:255',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'groupe' => 'max:255'
         ]);
 
         if ($request->hasFile('image')) {

@@ -39,10 +39,8 @@ const AffichageA = () => {
             status: newStatus
           };
         }
-
         return announcement;
       }));
-
     } catch (error) {
       console.error('Error updating announcement status:', error);
     }

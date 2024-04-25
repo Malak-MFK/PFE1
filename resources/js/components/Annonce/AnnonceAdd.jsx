@@ -29,6 +29,8 @@ const AnnonceAdd = () => {
       setStatus('en cours');
       setImage(null);
 
+      // Rafraîchir la page
+      location.reload();
     } catch (error) {
       console.error('Error:', error.response.data);
     }

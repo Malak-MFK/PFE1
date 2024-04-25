@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
-import './AddForm.css';
-import ReactDOM from 'react-dom';
-
-const Addform = () => {
+import './AddForm.css'
+const AddForm = ({ onClose }) => {
   const [name, setName] = useState('');
   const [lastname, setLastname] = useState('');
   const [cef, setCef] = useState('');
   const [numInscription, setNumInscription] = useState('');
   const [dateNaissance, setDateNaissance] = useState('');
   const [dateInscription, setDateInscription] = useState('');
-  const [image, setImage] = useState(null);
   const [groupe, setGroupe] = useState('');
+  const [image, setImage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,11 +21,11 @@ const Addform = () => {
     formData.append('num_inscription', numInscription);
     formData.append('date_naissance', dateNaissance);
     formData.append('date_inscription', dateInscription);
-    formData.append('image', image);
     formData.append('groupe', groupe);
+    formData.append('image', image);
 
     try {
-      const response = await axios.post('/api/stagiaires', formData, {
+      const response = await axios.post('http://localhost:8000/api/stagiaires', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -41,8 +39,15 @@ const Addform = () => {
       setNumInscription('');
       setDateNaissance('');
       setDateInscription('');
-      setImage(null);
       setGroupe('');
+      setImage(null);
+
+      if (onClose) {
+        onClose();
+      }
+
+      // Rafraîchir la page
+      window.location.reload();
     } catch (error) {
       console.error('Error:', error.response.data);
     }
@@ -73,60 +78,52 @@ const Addform = () => {
           id="cef"
           value={cef}
           onChange={(e) => setCef(e.target.value)}
-         />
-         <br/>
-         <label htmlFor="numInscription">Num Inscription:</label>
-         <input
+        /><br/>
+
+        <label htmlFor="numInscription">Num Inscription:</label>
+        <input
           type="text"
           id="numInscription"
           value={numInscription}
           onChange={(e) => setNumInscription(e.target.value)}
-         />
-         <br/>
-         <label htmlFor="dateNaissance">Date Naissance:</label>
-         <input
+        /><br/>
+
+        <label htmlFor="dateNaissance">Date Naissance:</label>
+        <input
           type="date"
           id="dateNaissance"
           value={dateNaissance}
           onChange={(e) => setDateNaissance(e.target.value)}
-         />
-         <br/>
-         <label htmlFor="dateInscription">Date Inscription:</label>
-         <input
+        /><br/>
+
+        <label htmlFor="dateInscription">Date Inscription:</label>
+        <input
           type="date"
           id="dateInscription"
           value={dateInscription}
           onChange={(e) => setDateInscription(e.target.value)}
-         />
-         <br/>
-         <label htmlFor="groupe">Groupe:</label>
-         <input
+        /><br/>
+
+        <label htmlFor="groupe">Groupe:</label>
+        <input
           type="text"
           id="groupe"
           value={groupe}
           onChange={(e) => setGroupe(e.target.value)}
-         />
-         <br/>
-         <label htmlFor="image">Image:</label>
-         <input
+        /><br/>
+
+        <label htmlFor="image">Image:</label>
+        <input
           type="file"
           id="image"
+          accept="image/*"
           onChange={(e) => setImage(e.target.files[0])}
-         />
-         <br/>
-        <a href='/Stagiaire'> <button type="submit">Add Stagiaire</button></a>
+        /><br/>
 
+        <button type="submit">Add Stagiaire</button>
+      </form>
+    </div>
+  );
+};
 
-         </form>
-         </div>
-         );
-         };
-         export default Addform;
-         if (document.getElementById('add')) {
-          const Index = ReactDOM.createRoot(document.getElementById("add"));
-          Index.render(
-          <React.StrictMode>
-          <Addform/>
-          </React.StrictMode>
-          )
-         }
+export default AddForm;

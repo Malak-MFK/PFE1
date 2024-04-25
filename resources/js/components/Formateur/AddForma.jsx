@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-import ReactDOM from 'react-dom';
-
-const AddForma = () => {
+const AddForma = ({ onClose }) => {
   const [name, setName] = useState('');
   const [lastname, setLastname] = useState('');
   const [diplom, setDiplom] = useState('');
@@ -34,6 +32,13 @@ const AddForma = () => {
       setDiplom('');
       setMatricule('');
       setImage(null);
+
+      if (onClose) {
+        onClose();
+      }
+
+      // Rafraîchir la page
+      window.location.reload();
     } catch (error) {
       console.error('Error:', error.response.data);
     }

@@ -42,7 +42,7 @@ class AnnouncementController extends Controller
     {
         $validatedData = $request->validate([
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'description' => 'required|string',
+            'description' => 'string',
             'status' => 'required|string|in:en cours,fini'
         ]);
 
