@@ -16,5 +16,9 @@ import './components/Dashboard/Example';
 import './components/Stagiaires/Stg';
 import './components/Stagiaires/Addform';
 import './components/Formateur/Forma';
-import './components/Annonce/Annonce'
+import './components/Annonce/Annonce';
+// 
+
+import './components/Login/Login'
+import './components/Login/Register'
 
